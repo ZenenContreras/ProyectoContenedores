@@ -11,9 +11,9 @@ PROYECTOCONTENEDORES/
 │   ├── nodejs/
 │   │   ├── Dockerfile
 │   │   └── server.js
-│   └── python/
-│       ├── Dockerfile
-│       └── server.py
+│   ├── python/
+│   │    ├── Dockerfile
+│   │    └── server.py
 │   ├── src/
 │   │   ├── config/       # Configuración global (ej. puertos iniciales)
 │   │   │   └── docker.config.js
