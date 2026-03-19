@@ -17,13 +17,14 @@ PROYECTOCONTENEDORES/
 │   ├── src/
 │   │   ├── config/       # Configuración global (ej. puertos iniciales)
 │   │   │   └── docker.config.js
-│   │   ├── routes/       # Rutas de la API (/api/services)
-│   │   │   └── microservices.routes.js
 │   │   ├── controllers/  # Recibe la petición del dashboard y responde
 │   │   │   └── microservices.controller.js
+│   │   ├── routes/       # Rutas de la API (/api/services)
+│   │   │   └── microservices.routes.js
 │   │   └── services/     # Ejecuta comandos de Docker (build, run, stop, rm)
-│   │       └── microservices.controller.js
+│   │       └── docker.service.js
 │   ├── package.json
+│   ├── index.js
 │   └── Dockerfile        # Imagen del backend
 ├── docker-compose.yml    # Levanta frontend y backend con un comando 
 └── README.md             # Documentación, diagrama y ejemplos
