@@ -62,14 +62,13 @@ const createAndDeploy = async (name, language, code) => {
         await fs.copyFile(path.join(langTemplateDir, 'server.py'), path.join(serviceDir, 'server.py'));
         await fs.copyFile(path.join(langTemplateDir, 'requirements.txt'), path.join(serviceDir, 'requirements.txt'));
         
-        // Envolvemos el código en una función de Python. 
-        // Importamos 'request' por si el usuario usa el ejemplo de la rúbrica
-        const userCodeWrapped = `from flask import request\n\ndef handler(query, body):\n` + 
-                                code.split('\n').map(line => `    ${line}`).join('\n'); 
-                                // Tabulamos el código del usuario para que quede dentro de la función 'handler'
+        // Envolvemos el código en una función de Python. e Importamos 'request' por si el usuario usa el ejemplo de la rúbrica
+        const userCodeWrapped = `from flask import request\n\ndef handler(query, body):\n` + code.split('\n').map(line => `    ${line}`).join('\n'); 
+        
+        // Tabulamos el código del usuario para que quede dentro de la función 'handler'
         await fs.writeFile(path.join(serviceDir, 'userCode.py'), userCodeWrapped);    
     } else {
-        
+
         throw new Error('Lenguaje no soportado actualmente');
 
     } 
