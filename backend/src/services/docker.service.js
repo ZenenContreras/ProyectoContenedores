@@ -55,11 +55,24 @@ const createAndDeploy = async (name, language, code) => {
         // Inyectamos el código del usuario en un módulo exportable
         const userCodeWrapped = `module.exports.handler = async (query, body) => {\n${code}\n};`;
         await fs.writeFile(path.join(serviceDir, 'userCode.js'), userCodeWrapped);
+
     } else if (language === 'python') {
-        // Aquí iría la lógica similar para Python
+        // Copiamos la plantilla Python
+        await fs.copyFile(path.join(langTemplateDir, 'Dockerfile'), path.join(serviceDir, 'Dockerfile'));
+        await fs.copyFile(path.join(langTemplateDir, 'server.py'), path.join(serviceDir, 'server.py'));
+        await fs.copyFile(path.join(langTemplateDir, 'requirements.txt'), path.join(serviceDir, 'requirements.txt'));
+        
+        // Envolvemos el código en una función de Python. 
+        // Importamos 'request' por si el usuario usa el ejemplo de la rúbrica
+        const userCodeWrapped = `from flask import request\n\ndef handler(query, body):\n` + 
+                                code.split('\n').map(line => `    ${line}`).join('\n'); 
+                                // Tabulamos el código del usuario para que quede dentro de la función 'handler'
+        await fs.writeFile(path.join(serviceDir, 'userCode.py'), userCodeWrapped);    
     } else {
+        
         throw new Error('Lenguaje no soportado actualmente');
-    }
+
+    } 
 
     // 3. Construir la imagen Docker
     await execPromise(`docker build -t ${imageName} ${serviceDir}`);
