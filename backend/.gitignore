@@ -1,3 +1,6 @@
 #Modulos 
-
 /node_modules
+
+#Archivos temporales
+/temp_services
+

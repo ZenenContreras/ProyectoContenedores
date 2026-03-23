@@ -51,9 +51,12 @@ PROYECTOCONTENEDORES/
 ├── frontend/             # Dashboard en React.js
 ├── backend/              # Orquestador en Express
 │   ├── templates/        # Plantillas base (Dockerfile, server.js, server.py)
-│   ├── nodejs/
-│   │   ├── Dockerfile
-│   │   └── server.js
+│   │   ├── nodejs/
+│   │   │   ├── Dockerfile
+│   │   │   └── server.js
+│   │   └── python/
+│   │       ├── Dockerfile
+│   │       └── server.js        
 │   ├── python/
 │   │    ├── Dockerfile
 │   │    └── server.py

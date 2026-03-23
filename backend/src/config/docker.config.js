@@ -6,7 +6,7 @@ module.exports = {
     // Carpeta donde están nuestras plantillas base
     templatesDir: path.join(__dirname, '../../templates'),
     // Puerto inicial para los contenedores (se incrementará dinámicamente)
-    startingPort: 5500,
+    startingPort: 4000,
     // Prefijo para identificar fácilmente nuestros contenedores
     containerPrefix: 'ms-dinamico-'
 };
