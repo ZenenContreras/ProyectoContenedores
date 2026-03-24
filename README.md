@@ -43,7 +43,7 @@ Diseñamos una arquitectura cliente-servidor para automatizar los procesos:
 ---
 ## Diagrama de Arquitectura
 
-**Falta esto**
+![Diagrama de Arquitectura del sistema](diagramas/Arquitectura.png)
 
 ---
 ## Estructura de carpetas
@@ -100,7 +100,7 @@ Mientras se finaliza la configuración de `docker-compose`, se puede ejecutar el
 
 ## Pruebas de la API (Endpoints)
 
-Puedes utilizar Postman, Thunder Client o cURL para interactuar con el orquestador apuntando a `http://localhost:5500/api/microservices`.
+Se puede utilizar Postman, Thunder Client o cURL para interactuar con el orquestador apuntando a `http://localhost:5500/api/microservices`.
 
 * **Crear Microservicio:** `POST /` (Enviar BODY JSON con `name`, `language` (`nodejs` o `python`) y `code`).
 * **Listar Microservicios:** `GET /` (Devuelve el estado de todos los contenedores activos).
