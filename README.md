@@ -63,11 +63,11 @@ PROYECTOCONTENEDORES/
 │   │    ├── Dockerfile
 │   │    └── server.py
 │   ├── src/
-│   │   ├── config/       # Configuración global (ej. puertos iniciales)
+│   │   ├── config/       # Configuración global (puertos iniciales etc)
 │   │   │   └── docker.config.js
 │   │   ├── controllers/  # Recibe la petición del dashboard y responde
 │   │   │   └── microservices.controller.js
-│   │   ├── routes/       # Rutas de la API (/api/services)
+│   │   ├── routes/       # Rutas de la API (/api/microservices)
 │   │   │   └── microservices.routes.js
 │   │   └── services/     # Ejecuta comandos de Docker (build, run, stop, rm)
 │   │       └── docker.service.js
