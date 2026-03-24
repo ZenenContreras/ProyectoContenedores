@@ -76,6 +76,78 @@ PROYECTOCONTENEDORES/
 └── README.md             # Documentación, diagrama y ejemplos
 ```
 
+---
+
+## Ejecución del Backend (Modo Desarrollo)
+
+Mientras se finaliza la configuración de `docker-compose`, se puede ejecutar el orquestador localmente para pruebas:
+
+1. Asegurarse de tener **Docker Desktop** ejecutándose en tu sistema.
+2. Abre una terminal en la carpeta `/backend`.
+3. Instala las dependencias:
+   `
+   npm install
+   `
+4. Levanta el servidor orquestador:
+   `
+   npm run dev
+   `
+   *(El servidor se ejecutará en `http://localhost:5500`)*
+
+---
+
+## Pruebas de la API (Endpoints)
+
+Puedes utilizar Postman, Thunder Client o cURL para interactuar con el orquestador apuntando a `http://localhost:5500/api/microservices`.
+
+* **Crear Microservicio:** `POST /` (Enviar BODY JSON con `name`, `language` (`nodejs` o `python`) y `code`).
+* **Listar Microservicios:** `GET /` (Devuelve el estado de todos los contenedores activos).
+* **Detener Microservicio:** `POST /:id/stop` (Pausa el contenedor indicado).
+* **Iniciar Microservicio:** `POST /:id/start` (Reanuda el contenedor indicado).
+* **Eliminar Microservicio:** `DELETE /:id` (Destruye la imagen y el contenedor de tu sistema).
+
+---
+
+## Ejemplos para Probar
+
+Ejemplos funcionales listos para copiar y pegar en la plataforma al momento de crear un servicio
+
+### 1. Hola Mundo (Python)
+Seleccionar lenguaje: **Python**
+```
+def hola():
+    return "Hola Mundo"
+
+return hola()
+```
+
+### 2. Suma de dos valores (Python)
+Seleccionar lenguaje: **Python** 
+```
+def sumar():
+    # Obtener parámetros desde la URL (http://localhost:PuertoDelContenedor/?a=10&b=20)
+
+    a = request.args.get('a', default=0, type=int)
+    b = request.args.get('b', default=0, type=int)
+    resultado = a + b
+    return f"La suma de {a} y {b} es: {resultado}"
+
+return sumar()
+```
+
+### 3. Suma de dos valores (Node.js)
+Seleccionar lenguaje: **Node.js**
+```
+// Obtener parámetros desde la URL (http://localhost:PuertoDelContenedor/?a=10&b=20)
+const a = parseInt(query.a || 0);
+const b = parseInt(query.b || 0);
+const resultado = a + b;
+
+return \`La suma de \${a} y \${b} es: \${resultado}\`;
+```
+
+---
+
 ### Integrantes Grupo 8: 
 - Claudia Elia Sierra
 - Carlos Ruidiaz Mendoza
