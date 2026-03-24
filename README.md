@@ -35,15 +35,17 @@ Diseñamos una arquitectura cliente-servidor para automatizar los procesos:
     - Construye la imagen 
     - Levanta el contenedor aisladamente en un puerto disponible.
 
-
+---
 ## Video Demostracion
 
 **Falta esto**
 
+---
 ## Diagrama de Arquitectura
 
 **Falta esto**
 
+---
 ## Estructura de carpetas
 
 ```
@@ -105,6 +107,8 @@ Puedes utilizar Postman, Thunder Client o cURL para interactuar con el orquestad
 * **Detener Microservicio:** `POST /:id/stop` (Pausa el contenedor indicado).
 * **Iniciar Microservicio:** `POST /:id/start` (Reanuda el contenedor indicado).
 * **Eliminar Microservicio:** `DELETE /:id` (Destruye la imagen y el contenedor de tu sistema).
+
+![diagrama de secuencia para hacer un nuevo microservicio](diagramas/Nuevo-Microservicio.png)
 
 ---
 
