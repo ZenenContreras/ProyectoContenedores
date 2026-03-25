@@ -22,7 +22,7 @@ function App() {
                 <LayoutDashboard className="text-white w-5 h-5" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900 leading-tight">Docker Orchestrator</h1>
+                <h1 className="text-xl font-bold text-slate-900 leading-tight">Proyecto Contenedores</h1>
                 <p className="text-xs text-slate-500 font-medium">Panel de Microservicios Dinámicos</p>
               </div>
             </div>
