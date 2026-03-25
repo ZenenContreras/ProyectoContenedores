@@ -4,16 +4,18 @@ import userCode
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def handler():
+def index():
     try:
-        # Llamamos a la función principal que el orquestador creó con el código del usuario
-        result = userCode.handler()
+        # 1. Capturamos los datos de la URL y el Body
+        query = request.args.to_dict()
+        body = request.get_json(silent=True) or {}
         
-        # requisito de retornar JSON
-        return jsonify({"success": True, "data": result})
+        # 2. Le pasamos query y body a la función
+        resultado = userCode.handler(query, body)
+        
+        return jsonify({"success": True, "data": resultado})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
 if __name__ == '__main__':
-    # host='0.0.0.0' es obligatorio en Docker para exponer el puerto hacia afuera
     app.run(host='0.0.0.0', port=3000)
