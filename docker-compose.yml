@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: 
+      context: ./frontend
+    container_name: orquestador-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true # Ayuda a que React recargue los cambios en vivo dentro de Docker
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend # El frontend espera a que el backend arranque primero
+
+  backend:
+    build: 
+      context: ./backend
+    container_name: orquestador-backend
+    ports:
+      - "5500:5500"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      # permitir que el backend use docker desde nuestra maquina
+      - /var/run/docker.sock:/var/run/docker.sock
