@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useContainerStore } from '../store/useContainerStore';
+import { Box, Code2, Terminal, Loader2, Rocket } from 'lucide-react';
 
 export default function CreateServiceForm() {
   const [name, setName] = useState('');
@@ -8,12 +9,11 @@ export default function CreateServiceForm() {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   
-  // Extraemos la función de Zustand
   const createContainer = useContainerStore((state) => state.createContainer);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!name || !code) return alert('Completa todos los campos');
+    if (!name || !code) return alert('Por favor, completa todos los campos requeridos.');
     
     setLoading(true);
     try {
@@ -21,42 +21,77 @@ export default function CreateServiceForm() {
       setName('');
       setCode('');
     } catch (error) {
-      alert('Error al crear el microservicio');
+      alert('Hubo un error al desplegar el microservicio.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md h-fit border border-gray-200">
-      <h2 className="text-xl font-semibold mb-4 border-b pb-2">Crear Nuevo Servicio</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-1">Nombre</label>
-          <input type="text" value={name} onChange={e => setName(e.target.value)} 
-                 className="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none" 
-                 placeholder="ej: calculadora" />
+    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="border-b border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center gap-2">
+        <h2 className="text-lg font-semibold text-slate-800">Desplegar Servicio</h2>
+      </div>
+      
+      <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <div className="space-y-1.5">
+          <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+            <Box className="w-4 h-4 text-slate-400" />
+            Nombre del contenedor
+          </label>
+          <input 
+            type="text" 
+            value={name} 
+            onChange={e => setName(e.target.value)} 
+            className="w-full border border-slate-300 px-3 py-2 rounded-lg text-sm focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 outline-none transition-all placeholder:text-slate-400" 
+            placeholder="ej. api-calculadora" 
+          />
         </div>
         
-        <div>
-          <label className="block text-sm font-medium mb-1">Lenguaje</label>
-          <select value={language} onChange={e => setLanguage(e.target.value)} 
-                  className="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none">
+        <div className="space-y-1.5">
+          <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+            <Terminal className="w-4 h-4 text-slate-400" />
+            Entorno de ejecución
+          </label>
+          <select 
+            value={language} 
+            onChange={e => setLanguage(e.target.value)} 
+            className="w-full border border-slate-300 px-3 py-2 rounded-lg text-sm focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 outline-none transition-all bg-white"
+          >
             <option value="nodejs">Node.js (JavaScript)</option>
             <option value="python">Python (Flask)</option>
           </select>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Código Fuente</label>
-          <textarea value={code} onChange={e => setCode(e.target.value)} rows={8}
-                    className="w-full border p-2 rounded font-mono text-sm bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none"
-                    placeholder="// Pega aquí tu código..." />
+        <div className="space-y-1.5">
+          <label className="flex items-center justify-between text-sm font-medium text-slate-700">
+            <span className="flex items-center gap-2">
+              <Code2 className="w-4 h-4 text-slate-400" />
+              Código Fuente
+            </span>
+          </label>
+          <textarea 
+            value={code} 
+            onChange={e => setCode(e.target.value)} 
+            rows={8}
+            className="w-full border border-slate-300 p-4 rounded-lg font-mono text-sm bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 outline-none transition-all placeholder:text-slate-400"
+            placeholder="// Escribe o pega tu código aquí..." 
+          />
         </div>
 
-        <button type="submit" disabled={loading} 
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors disabled:bg-gray-400">
-          {loading ? 'Construyendo Docker...' : 'Desplegar Microservicio'}
+        <button 
+          type="submit" 
+          disabled={loading} 
+          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors flex justify-center items-center gap-2 disabled:bg-slate-300 disabled:cursor-not-allowed shadow-sm"
+        >
+          {loading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>Construyendo Imagen...</span>
+            </>
+          ) : (
+            <span>Crear e Iniciar</span>
+          )}
         </button>
       </form>
     </div>
