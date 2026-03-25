@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const { exec } = require('child_process');
 const util = require('util');
-const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 const config = require('../config/docker.config');
 
 const execPromise = util.promisify(exec);
@@ -33,7 +33,7 @@ const deleteContainer = async (containerName) => {
 };
 
 const createAndDeploy = async (name, language, code) => {
-    const serviceId = uuidv4().substring(0, 8); // Un ID corto
+    const serviceId = crypto.randomUUID().substring(0, 8); // Un ID corto
     const safeName = name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
     const serviceDir = path.join(config.tempServicesDir, `${safeName}-${serviceId}`);
     const assignedPort = currentPort++;
