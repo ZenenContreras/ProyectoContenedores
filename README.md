@@ -147,7 +147,7 @@ const a = parseInt(query.a || 0);
 const b = parseInt(query.b || 0);
 const resultado = a + b;
 
-return \`La suma de \${a} y \${b} es: \${resultado}\`;
+return `La suma de ${a} y ${b} es: ${resultado}`;
 ```
 
 ---
