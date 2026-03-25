@@ -80,21 +80,17 @@ PROYECTOCONTENEDORES/
 
 ---
 
-## Ejecución del Backend (Modo Desarrollo)
-
-Mientras se finaliza la configuración de `docker-compose`, se puede ejecutar el orquestador localmente para pruebas:
+## Ejecución del Proyecto
 
 1. Asegurarse de tener **Docker Desktop** ejecutándose en tu sistema.
-2. Abre una terminal en la carpeta `/backend`.
-3. Instala las dependencias:
-   `
-   npm install
-   `
-4. Levanta el servidor orquestador:
-   `
-   npm run dev
-   `
-   *(El servidor se ejecutará en `http://localhost:5500`)*
+2. Abre una terminal en la raiz del proyecto (Donde se encuentra el `docker-compose.yml`)
+3. Ejecuta el siguiente comando:
+```
+docker-compose up
+```
+(Nota: Si se desea forzar la reconstrucción de las imágenes tras un cambio de código local, usar `docker-compose up --build`)
+
+4. Una vez que los contenedores estén listos, accede al Dashboard desde tu navegador en: `http://localhost:5173`
 
 ---
 
