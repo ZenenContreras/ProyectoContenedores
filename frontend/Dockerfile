@@ -1,4 +1,5 @@
-FROM node:18-alpine
+FROM node:22-alpine 
+#nueva actualizacion de vite require 20.19+
 
 WORKDIR /app
 
