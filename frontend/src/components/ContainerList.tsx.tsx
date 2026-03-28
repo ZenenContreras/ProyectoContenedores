@@ -32,6 +32,7 @@ export default function ContainerList() {
           <thead>
             <tr className="bg-white border-b border-slate-200">
               <th className="py-3 px-6 font-medium text-xs uppercase tracking-wider text-slate-500">Contenedor</th>
+              <th className="py-3 px-6 font-medium text-xs uppercase tracking-wider text-slate-500">Descripción</th>
               <th className="py-3 px-6 font-medium text-xs uppercase tracking-wider text-slate-500">Estado</th>
               <th className="py-3 px-6 font-medium text-xs uppercase tracking-wider text-slate-500">Endpoint URL</th>
               <th className="py-3 px-6 font-medium text-xs uppercase tracking-wider text-slate-500 text-center">Acciones</th>
@@ -40,7 +41,7 @@ export default function ContainerList() {
           <tbody className="divide-y divide-slate-100">
             {containers.length === 0 ? (
               <tr>
-                <td colSpan={4} className="text-center py-12">
+                <td colSpan={5} className="text-center py-12">
                   <div className="flex flex-col items-center justify-center text-slate-400">
                     <ServerCrash className="w-12 h-12 mb-3 stroke-1" />
                     <p className="text-sm font-medium text-slate-500">No hay contenedores en ejecución.</p>
@@ -60,6 +61,13 @@ export default function ContainerList() {
                       <div className="font-semibold text-slate-800">{cleanName}</div>
                       <div className="text-xs text-slate-400 font-mono mt-0.5">{c.id.substring(0, 12)}</div>
                     </td>
+
+                    <td className="py-4 px-6">
+                      <div className="text-sm text-slate-600 line-clamp-2 max-w-xs">
+                        {c.description || <span className="text-slate-400 italic">Sin descripción</span>}
+                      </div>
+                    </td>
+
                     <td className="py-4 px-6">
                       <div className="flex flex-col items-start gap-1">
                         <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
@@ -73,6 +81,7 @@ export default function ContainerList() {
                         <span className="text-[11px] text-slate-400 font-medium">{c.status}</span>
                       </div>
                     </td>
+
                     <td className="py-4 px-6">
                       {isRunning && endpoint !== '#' ? (
                         <a 
@@ -88,6 +97,7 @@ export default function ContainerList() {
                         <span className="text-slate-300 text-sm font-mono">-</span>
                       )}
                     </td>
+
                     <td className="py-4 px-6">
                       <div className="flex justify-center items-center gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
                         {!isRunning ? (
@@ -117,6 +127,7 @@ export default function ContainerList() {
                         </button>
                       </div>
                     </td>
+
                   </tr>
                 );
               })

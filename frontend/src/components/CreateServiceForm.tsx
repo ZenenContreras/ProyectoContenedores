@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useContainerStore } from '../store/useContainerStore';
-import { Box, Code2, Terminal, Loader2, Rocket } from 'lucide-react';
+import { Box, Code2, Terminal, Loader2, Rocket, FileText } from 'lucide-react';
 
 export default function CreateServiceForm() {
   const [name, setName] = useState('');
+  const [description, setDescription] = useState(''); // <-- NUEVO ESTADO
   const [language, setLanguage] = useState('nodejs');
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,8 +18,10 @@ export default function CreateServiceForm() {
     
     setLoading(true);
     try {
-      await createContainer({ name, language, code });
+      // <-- AÑADIMOS LA DESCRIPCIÓN AL ENVIAR
+      await createContainer({ name, description, language, code });
       setName('');
+      setDescription(''); // <-- LIMPIAMOS EL CAMPO
       setCode('');
     } catch (error) {
       alert('Hubo un error al desplegar el microservicio.');
@@ -30,6 +33,7 @@ export default function CreateServiceForm() {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <div className="border-b border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center gap-2">
+        <Rocket className="w-5 h-5 text-indigo-600" />
         <h2 className="text-lg font-semibold text-slate-800">Desplegar Servicio</h2>
       </div>
       
@@ -45,6 +49,20 @@ export default function CreateServiceForm() {
             onChange={e => setName(e.target.value)} 
             className="w-full border border-slate-300 px-3 py-2 rounded-lg text-sm focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 outline-none transition-all placeholder:text-slate-400" 
             placeholder="ej. api-calculadora" 
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+            <FileText className="w-4 h-4 text-slate-400" />
+            Descripción
+          </label>
+          <input 
+            type="text" 
+            value={description} 
+            onChange={e => setDescription(e.target.value)} 
+            className="w-full border border-slate-300 px-3 py-2 rounded-lg text-sm focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 outline-none transition-all placeholder:text-slate-400" 
+            placeholder="ej. Este microservicio suma dos números..." 
           />
         </div>
         
