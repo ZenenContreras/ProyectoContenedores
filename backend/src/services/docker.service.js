@@ -10,6 +10,7 @@ const execPromise = util.promisify(exec);
 const listContainers = async () => {
     const command = `docker ps -a --filter "name=${config.containerPrefix}" --format '{"id":"{{.ID}}", "name":"{{.Names}}", "status":"{{.Status}}", "state":"{{.State}}", "ports":"{{.Ports}}"}'`;
     const { stdout } = await execPromise(command);
+
     if (!stdout.trim()) return [];
     return stdout.trim().split('\n').map(line => JSON.parse(line));
 };
@@ -26,7 +27,7 @@ const deleteContainer = async (containerName) => {
     await execPromise(`docker rm -f ${containerName}`);
 };
 
-const createAndDeploy = async (name, language, code) => {
+const createAndDeploy = async (name, language, code, description) => {
     const serviceId = crypto.randomUUID().substring(0, 8);
     const safeName = name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
     const serviceDir = path.join(config.tempServicesDir, `${safeName}-${serviceId}`);
@@ -43,6 +44,7 @@ const createAndDeploy = async (name, language, code) => {
         await fs.copyFile(path.join(langTemplateDir, 'Dockerfile'), path.join(serviceDir, 'Dockerfile'));
         await fs.copyFile(path.join(langTemplateDir, 'server.js'), path.join(serviceDir, 'server.js'));
         await fs.copyFile(path.join(langTemplateDir, 'package.json'), path.join(serviceDir, 'package.json'));
+
         const userCodeWrapped = `module.exports.handler = async (query, body) => {\n${code}\n};`;
         await fs.writeFile(path.join(serviceDir, 'userCode.js'), userCodeWrapped);
 
@@ -50,9 +52,10 @@ const createAndDeploy = async (name, language, code) => {
         await fs.copyFile(path.join(langTemplateDir, 'Dockerfile'), path.join(serviceDir, 'Dockerfile'));
         await fs.copyFile(path.join(langTemplateDir, 'server.py'), path.join(serviceDir, 'server.py'));
         await fs.copyFile(path.join(langTemplateDir, 'requirements.txt'), path.join(serviceDir, 'requirements.txt'));
-        const userCodeWrapped = `from flask import request\n\ndef handler(query, body):\n` + code.split('\n').map(line => `    ${line}`).join('\n');
-        await fs.writeFile(path.join(serviceDir, 'userCode.py'), userCodeWrapped);
 
+        const userCodeWrapped = `from flask import request\n\ndef handler(query, body):\n` + code.split('\n').map(line => `    ${line}`).join('\n');
+
+        await fs.writeFile(path.join(serviceDir, 'userCode.py'), userCodeWrapped);
     } else {
         throw new Error('Lenguaje no soportado actualmente');
     }
@@ -61,6 +64,7 @@ const createAndDeploy = async (name, language, code) => {
     await execPromise(`docker build -t ${imageName} ${serviceDir}`);
 
     // 4. Ejecutar el contenedor con labels de Traefik
+    const safeDescription = description ? description.replace(/"/g, '\\"') : 'Sin descripción';
     const cmd =
         `docker run -d ` +
         `--name ${containerName} ` +
@@ -74,6 +78,8 @@ const createAndDeploy = async (name, language, code) => {
         `${imageName}`;
 
     await execPromise(cmd);
+    // 4. Ejecutar el contenedor
+
 
     return {
         id: containerName,

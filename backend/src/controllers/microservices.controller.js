@@ -2,15 +2,15 @@ const dockerService = require('../services/docker.service');
 
 const createMicroservice = async (req, res) => {
     try {
-        const { name, language, code } = req.body;
-        
-        if (!name || !language || !code) {
-            return res.status(400).json({ error: 'Faltan datos: name, language y code son obligatorios.' });
-        }
+        const { name, language, code, description } = req.body;
 
-        // Llamamos al servicio para crear el contenedor
-        const result = await dockerService.createAndDeploy(name, language, code);
-        res.status(201).json({ success: true, data: result });
+        if (!name || !code || !language) {
+            return res.status(400).json({ success: false, error: "Faltan datos requeridos" });
+        }
+                   
+        const newService = await dockerService.createAndDeploy(name, language, code, description);
+
+        res.status(201).json({ success: true, data: newService });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
