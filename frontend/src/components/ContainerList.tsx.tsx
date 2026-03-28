@@ -5,10 +5,12 @@ export default function ContainerList() {
   const containers = useContainerStore((state) => state.containers);
   const fetchContainers = useContainerStore((state) => state.fetchContainers);
   const handleAction = useContainerStore((state) => state.handleAction);
-  
-  const getEndpoint = (ports: string) => {
-    const match = ports.match(/0\.0\.0\.0:(\d+)->/);
-    return match ? `http://localhost:${match[1]}` : '#';
+
+  const getEndpoint = (name: string) => {
+    const safeName = name
+      .replace('ms-dinamico-', '')
+      .replace(/-[a-f0-9]{8}$/, '');
+    return `http://localhost/ms/${safeName}/`;
   };
 
   return (
@@ -18,8 +20,8 @@ export default function ContainerList() {
           <Activity className="w-5 h-5 text-indigo-600" />
           <h2 className="text-lg font-semibold text-slate-800">Servicios Activos</h2>
         </div>
-        <button 
-          onClick={fetchContainers} 
+        <button
+          onClick={fetchContainers}
           className="flex items-center gap-2 text-sm text-slate-600 bg-white border border-slate-300 hover:bg-slate-50 px-3 py-1.5 rounded-lg transition-colors font-medium shadow-sm"
         >
           <RefreshCw className="w-4 h-4" />
@@ -51,9 +53,9 @@ export default function ContainerList() {
             ) : (
               containers.map((c) => {
                 const isRunning = c.state === 'running';
-                const endpoint = getEndpoint(c.ports);
+                const endpoint = getEndpoint(c.name);
                 const cleanName = c.name.replace('/', '');
-                
+
                 return (
                   <tr key={c.id} className="hover:bg-slate-50/50 transition-colors group">
                     <td className="py-4 px-6">
@@ -62,11 +64,10 @@ export default function ContainerList() {
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex flex-col items-start gap-1">
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
-                          isRunning 
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
-                            : 'bg-rose-50 text-rose-700 border-rose-200'
-                        }`}>
+                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${isRunning
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : 'bg-rose-50 text-rose-700 border-rose-200'
+                          }`}>
                           <span className={`w-1.5 h-1.5 rounded-full ${isRunning ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
                           {isRunning ? 'En ejecución' : 'Detenido'}
                         </span>
@@ -75,10 +76,10 @@ export default function ContainerList() {
                     </td>
                     <td className="py-4 px-6">
                       {isRunning && endpoint !== '#' ? (
-                        <a 
-                          href={endpoint} 
-                          target="_blank" 
-                          rel="noreferrer" 
+                        <a
+                          href={endpoint}
+                          target="_blank"
+                          rel="noreferrer"
                           className="inline-flex items-center gap-1.5 text-sm font-mono text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-md transition-colors"
                         >
                           {endpoint.replace('http://localhost:', ':')}
@@ -91,26 +92,26 @@ export default function ContainerList() {
                     <td className="py-4 px-6">
                       <div className="flex justify-center items-center gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
                         {!isRunning ? (
-                          <button 
-                            onClick={() => handleAction('start', c.name)} 
-                            title="Iniciar Contenedor" 
+                          <button
+                            onClick={() => handleAction('start', c.name)}
+                            title="Iniciar Contenedor"
                             className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors"
                           >
                             <Play className="w-5 h-5 fill-emerald-600/20" />
                           </button>
                         ) : (
-                          <button 
-                            onClick={() => handleAction('stop', c.name)} 
-                            title="Detener Contenedor" 
+                          <button
+                            onClick={() => handleAction('stop', c.name)}
+                            title="Detener Contenedor"
                             className="p-1.5 text-amber-600 hover:bg-amber-50 rounded-md transition-colors hover:cursor-pointer"
                           >
                             <Square className="w-5 h-5 fill-amber-600/20" />
                           </button>
                         )}
                         <div className="w-px h-4 bg-slate-200 mx-1"></div>
-                        <button 
-                          onClick={() => handleAction('delete', c.name)} 
-                          title="Eliminar Permanente" 
+                        <button
+                          onClick={() => handleAction('delete', c.name)}
+                          title="Eliminar Permanente"
                           className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-md transition-colors hover:cursor-pointer"
                         >
                           <Trash2 className="w-5 h-5" />

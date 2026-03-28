@@ -1,28 +1,56 @@
-version: '3.8'
-
 services:
-  frontend:
-    build: 
-      context: ./frontend
-    container_name: orquestador-frontend
+
+  traefik:
+    image: traefik:v2.11
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik-network"
+      - "--entrypoints.web.address=:80"
     ports:
-      - "5173:5173"
-    environment:
-      - CHOKIDAR_USEPOLLING=true # Ayuda a que React recargue los cambios en vivo dentro de Docker
+      - "80:80"
+      - "8080:8080"
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    depends_on:
-      - backend # El frontend espera a que el backend arranque primero
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - traefik-network
 
   backend:
-    build: 
+    build:
       context: ./backend
     container_name: orquestador-backend
-    ports:
-      - "5500:5500"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.http.services.backend.loadbalancer.server.port=5500"
     volumes:
       - ./backend:/app
       - /app/node_modules
-      # permitir que el backend use docker desde nuestra maquina
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik-network
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: orquestador-frontend
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.routers.frontend.priority=1"
+      - "traefik.http.services.frontend.loadbalancer.server.port=5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - traefik-network
+
+networks:
+  traefik-network:
+    name: traefik-network
+    external: false

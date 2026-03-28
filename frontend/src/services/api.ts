@@ -1,6 +1,6 @@
 import type { MicroserviceReq, Container } from '../types';
 
-const API_URL = 'http://localhost:5500/api/microservices';
+const API_URL = '/api/microservices';
 
 export const api = {
   getMicroservices: async (): Promise<Container[]> => {
