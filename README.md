@@ -167,7 +167,7 @@ return `La suma de ${a} y ${b} es: ${a + b}`;
 ---
 
 ## Integrantes Grupo 8
-- Claudia Elia Sierra
+- Claudia Elias Sierra
 - Carlos Ruidiaz Mendoza
 - Juan Fernandez Barrios
 - Zenen Contreras Royero
