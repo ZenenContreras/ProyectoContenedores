@@ -38,7 +38,9 @@ Diseñamos una arquitectura cliente-servidor para automatizar los procesos:
 ---
 ## Video Demostracion
 
-**Falta esto**
+[![](https://markdown-videos.deta.dev/youtube/X9pBvXM56Q4)](https://youtu.be/X9pBvXM56Q4)
+[Ver video en youtube](https://www.youtube.com/watch?v=X9pBvXM56Q4)
+
 
 ---
 ## Diagrama de Arquitectura
