@@ -67,7 +67,7 @@ const createAndDeploy = async (name, language, code, description) => {
 
     // 4. Ejecutar el contenedor
     const safeDescription = description ? description.replace(/"/g, '\\"') : 'Sin descripción';
-    await execPromise(`docker run -d -p ${assignedPort}:3000 --name ${containerName} --label desc="${safeDescription}" ${imageName}`);
+    await execPromise(`docker run -d -p ${assignedPort}:3000 --name ${containerName} --label desc="${safeDescription}" --label "com.docker.compose.project=proyectocontenedores" ${imageName}`);
 
     return {
         id: containerName,
