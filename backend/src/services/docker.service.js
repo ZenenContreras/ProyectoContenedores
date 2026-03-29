@@ -10,9 +10,22 @@ const execPromise = util.promisify(exec);
 const listContainers = async () => {
     const command = `docker ps -a --filter "name=${config.containerPrefix}" --format '{"id":"{{.ID}}", "name":"{{.Names}}", "status":"{{.Status}}", "state":"{{.State}}", "ports":"{{.Ports}}"}'`;
     const { stdout } = await execPromise(command);
-
     if (!stdout.trim()) return [];
-    return stdout.trim().split('\n').map(line => JSON.parse(line));
+
+    const containers = stdout.trim().split('\n').map(line => JSON.parse(line));
+
+    const withDescriptions = await Promise.all(containers.map(async (c) => {
+        try {
+            const { stdout: labelOut } = await execPromise(
+                `docker inspect --format '{{index .Config.Labels "ms.description"}}' ${c.id}`
+            );
+            return { ...c, description: labelOut.trim() || 'Sin descripción' };
+        } catch {
+            return { ...c, description: 'Sin descripción' };
+        }
+    }));
+
+    return withDescriptions;
 };
 
 const startContainer = async (containerName) => {
@@ -75,6 +88,8 @@ const createAndDeploy = async (name, language, code, description) => {
         `--label traefik.http.routers.${containerName}.middlewares=${containerName}-strip ` +
         `--label "traefik.http.middlewares.${containerName}-strip.stripprefix.prefixes=/ms/${safeName}" ` +
         `--label traefik.http.services.${containerName}.loadbalancer.server.port=3000 ` +
+        `--label "ms.description=${safeDescription}" ` +
+        `--label "com.docker.compose.project=proyectocontenedores" ` +
         `${imageName}`;
 
     await execPromise(cmd);
@@ -85,6 +100,7 @@ const createAndDeploy = async (name, language, code, description) => {
         id: containerName,
         name: safeName,
         language,
+        description: safeDescription,
         endpoint: `http://localhost/ms/${safeName}/`,
         status: 'running'
     };
