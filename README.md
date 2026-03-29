@@ -38,7 +38,7 @@ Diseñamos una arquitectura cliente-servidor para automatizar los procesos:
 ---
 ## Video Demostracion
     
-[![Watch the YouTube video](https://img.youtube.com/vi/X9pBvXM56Q4/0.jpg)](https://www.youtube.com)
+[![Watch the YouTube video](https://img.youtube.com/vi/X9pBvXM56Q4/0.jpg)](https://www.youtube.com/watch?v=X9pBvXM56Q4)
 
 [Ver video en youtube](https://www.youtube.com/watch?v=X9pBvXM56Q4)
 
