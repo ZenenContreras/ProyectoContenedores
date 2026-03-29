@@ -57,21 +57,16 @@ Al recibir una petición de creación, el backend:
 
 ## Ejecución del Proyecto
 
-1. Asegurarse de tener **Docker Desktop** ejecutándose.
-2. Clonar el repositorio y cambiar a esta rama:
-```bash
-git clone <url-del-repositorio>
-git checkout develop-proxy
-```
-3. Abrir una terminal en la raíz del proyecto (donde está el `docker-compose.yml`).
-4. Ejecutar:
+1. Asegurarse de tener **Docker Desktop** ejecutándose en tu sistema.
+2. Abre una terminal en la raiz del proyecto (donde está el `docker-compose.yml`).
+3. Ejecuta el siguiente comando:
 ```bash
 docker-compose up
 ```
-> Para forzar la reconstrucción de imágenes tras cambios locales: `docker-compose up --build`
+(Nota: Para forzar la reconstrucción de imágenes tras cambios locales usa: `docker-compose up --build`)
 
-5. Acceder al dashboard en: `http://localhost`
-6. El dashboard de Traefik está disponible en: `http://localhost:8080`
+4. Una vez listos los contenedores, accede al Dashboard web en: `http://localhost/`
+5. *(Opcional)* El dashboard de Traefik también se enciende en: `http://localhost:8080/`
 
 ---
 
@@ -120,49 +115,47 @@ Se puede usar Postman, Thunder Client o cURL apuntando a `http://localhost/api/m
 | `POST` | `/api/microservices/:id/stop` | Detener un microservicio |
 | `DELETE` | `/api/microservices/:id` | Eliminar un microservicio |
 
----
-
-## Ejemplos Listos para Usar
-
-Ejemplos funcionales para copiar y pegar directamente en el dashboard.
-
-### 1. Hola Mundo — Python
-**Lenguaje:** Python
-```
-return "Hola Mundo"
-```
-**Endpoint:** `http://localhost/ms/holamundo/`
+![diagrama de secuencia para hacer un nuevo microservicio](diagramas/Nuevo-Microservicio.png)
 
 ---
 
-### 2. Hola Mundo — Node.js
-**Lenguaje:** Node.js
-```
-return "Hola Mundo desde Node.js";
-```
-**Endpoint:** `http://localhost/ms/holanode/`
+## Ejemplos para Probar
 
----
+Ejemplos funcionales listos para copiar y pegar en la plataforma al momento de crear un servicio
 
-### 3. Suma de dos valores — Python
-**Lenguaje:** Python
-```
-a = int(query.get('a', 0))
-b = int(query.get('b', 0))
-return a + b
-```
-**Endpoint:** `http://localhost/ms/suma/?a=10&b=5`
+### 1. Hola Mundo (Python)
+Seleccionar lenguaje: **Python**
+```python
+def hola():
+    return "Hola Mundo"
 
----
-
-### 4. Suma de dos valores — Node.js
-**Lenguaje:** Node.js
+return hola()
 ```
+
+### 2. Suma de dos valores (Python)
+Seleccionar lenguaje: **Python** 
+```python
+def sumar():
+    # Obtener parámetros desde la URL (http://localhost/ms/suma/?a=10&b=20)
+
+    a = request.args.get('a', default=0, type=int)
+    b = request.args.get('b', default=0, type=int)
+    resultado = a + b
+    return f"La suma de {a} y {b} es: {resultado}"
+
+return sumar()
+```
+
+### 3. Suma de dos valores (Node.js)
+Seleccionar lenguaje: **Node.js**
+```javascript
+// Obtener parámetros desde la URL (http://localhost/ms/suma/?a=10&b=20)
 const a = parseInt(query.a || 0);
 const b = parseInt(query.b || 0);
-return `La suma de ${a} y ${b} es: ${a + b}`;
+const resultado = a + b;
+
+return `La suma de ${a} y ${b} es: ${resultado}`;
 ```
-**Endpoint:** `http://localhost/ms/suma/?a=10&b=5`
 
 ---
 
